@@ -33,7 +33,7 @@ static WFBeaconStore *__instance = nil;
 
 // Grabs beacon data from the server
 - (void)getBeaconsFromServer {
-    [[CCHBeaconService sharedInstance] getBeaconsWithTags:@[@"wayfinder"] completionHandler:^(NSArray *beacons, NSError *error) {
+    [[CCHBeaconService sharedInstance] getBeaconsWithTags:@[WFBeaconTag] completionHandler:^(NSArray *beacons, NSError *error) {
         if (!error)
         {
             if (beacons.count > 0) {
@@ -63,7 +63,7 @@ static WFBeaconStore *__instance = nil;
 
 // Grabs vault data from the server
 - (void)updateBeaconDataFromServer {
-    [[CCHVault sharedInstance] getItemsWithTags:@[@"wayfinderdemo"] completionHandler:^(NSArray *responses, NSError *error) {
+    [[CCHVault sharedInstance] getItemsWithTags:@[WFVaultTag] completionHandler:^(NSArray *responses, NSError *error) {
         if (!error) {
             if (responses.count > 0) {
                 [responses enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -95,22 +95,6 @@ static WFBeaconStore *__instance = nil;
         } else {
             NSLog(@"Error: %@", error);
         }
-    }];
-}
-
-// Parses JSON into array of WFBeaconMetadata objects
-- (void)getBeaconsFromFile {
-    NSString *beaconsPath = [[NSBundle mainBundle] pathForResource: @"wayFinderDemo" ofType: @"json"];
-    NSData *data = [NSData dataWithContentsOfFile:beaconsPath];
-    NSError *error = nil;
-    
-    self.beacons = [NSMutableArray new];
-    self.beaconsDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-    
-    [self.beaconsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        WFBeaconMetadata *beacon = [[WFBeaconMetadata alloc]initWithDictionary:(NSDictionary *)obj];
-        beacon.beaconID = idx;
-        [self.beacons addObject:beacon];
     }];
 }
 

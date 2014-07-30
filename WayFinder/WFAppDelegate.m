@@ -7,7 +7,6 @@
 //
 
 #import "WFAppDelegate.h"
-#import <ContextHub/ContextHub.h>
 
 @implementation WFAppDelegate
 
@@ -60,6 +59,7 @@
 #pragma mark - ContextHub
 
 - (void)setupContextHub {
+    // Debug flag is very important so that pushes are sent to the correct gateway during development
 #ifdef DEBUG
     [[ContextHub sharedInstance] setDebug:TRUE];
 #endif
@@ -70,20 +70,12 @@
     [[CCHSensorPipeline sharedInstance] setDelegate:self];
     [[CCHSensorPipeline sharedInstance] setDataSource:self];
     
-    // Subscribe to "beacondemo" beacon tag
-    if ([[CCHSensorPipeline sharedInstance] addSubscriptionForTags:@[@"wayfinder"]]) {
-        NSLog(@"Successfully added subscription");
+    // Subscribe to "beacon-wayfinder" beacon tag
+    if ([[CCHSensorPipeline sharedInstance] addSubscriptionForTags:@[WFBeaconTag]]) {
+        NSLog(@"Successfully added subscription to \"%@\" tag", WFBeaconTag);
     } else {
-        NSLog(@"Failed to add subscription to \"wayfinder\" tag");
+        NSLog(@"Failed to add subscription to \"%@\" tag", WFBeaconTag);
     }
-    
-    [[CCHSubscriptionService sharedInstance] addBeaconSubscriptionForTags:@[@"wayfinder"] completionHandler:^(NSError *error) {
-        if (!error) {
-            NSLog(@"Succesfully added beacon CRUD subscription");
-        } else {
-            NSLog(@"Failed to add beacon CRUD subscription");
-        }
-    }];
 }
 
 #pragma mark - Sensor Pipeline Delegate
@@ -96,10 +88,12 @@
 }
 
 - (void)sensorPipeline:(CCHSensorPipeline *)sensorPipeline willPostEvent:(NSDictionary *)event {
+    // If you want to access event data directl before it will be posted to the server, you can do that here
     NSLog(@"Will post event: %@", event);
 }
 
 - (void)sensorPipeline:(CCHSensorPipeline *)sensorPipeline didPostEvent:(NSDictionary *)event {
+    // If you want to access event data directly after it has been posted to the server, you can do that here
     NSLog(@"Did post event: %@", event);
 }
 
@@ -112,38 +106,27 @@
 
 #pragma mark - Remote Notifications
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"Did fail to register %@", error);
-}
-
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSLog (@"Did register for push notifications");
-    // saving token in user defaults so that it can be used later to test push
-    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:@"push_token"];
-    
     // Set up the alias, tag, and register for push notifications on the server
-    NSString *alias = [ContextHub deviceId];
-    NSArray *tags = @[@"testing"];
-    [[CCHPush sharedInstance] registerDeviceToken:deviceToken alias:alias tags:tags completionHandler:^(NSError *error) {
+    [[CCHPush sharedInstance] registerDeviceToken:deviceToken alias:[[UIDevice currentDevice] name] tags:@[WFDeviceTag] completionHandler:^(NSError *error) {
         if (!error) {
-            NSLog(@"Successfully registered device with alias %@ and tags %@", alias, tags);
+            NSLog(@"Successfully registered device with alias %@ and tags %@", [[UIDevice currentDevice] name], WFDeviceTag);
         }
         else {
             NSLog(@"Error: %@", error);
         }
     }];
-    
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Did fail to register %@", error);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
-    // Make sure it's not a ContextHub push
-    if ([userInfo valueForKey:@"context_hub"]) {
-        NSLog(@"Background ContextHub push received");
-        [[CCHPush sharedInstance] application:application didReceiveRemoteNotification:userInfo completionHandler:completionHandler];
-    } else {
+    // Define our fetch completion handler which is called by ContextHub if the push wasn't a push for CCHSubscriptionService
+     void (^fetchCompletionHandler)(UIBackgroundFetchResult) = ^(UIBackgroundFetchResult result){
         NSLog(@"Push Received %@", userInfo);
-        
         NSString *message = [userInfo valueForKeyPath:@"aps.alert"];
         
         // Pop an alert about our message
@@ -151,7 +134,10 @@
         
         // This push resulted in no new background data
         completionHandler(UIBackgroundFetchResultNoData);
-    }
+    };
+    
+    // Let ContextHub process the push
+    [[CCHPush sharedInstance] application:application didReceiveRemoteNotification:userInfo completionHandler:fetchCompletionHandler];
 }
 
 @end
