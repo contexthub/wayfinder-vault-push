@@ -67,7 +67,7 @@ static WFBeaconStore *__instance = nil;
         if (!error) {
             if (responses.count > 0) {
                 [responses enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSString *beaconName = obj[@"name"];
+                    NSString *beaconName = [obj valueForKeyPath:@"data.name"];
                     WFBeaconMetadata *beacon = [self metadataForBeaconWithName:beaconName];
                     
                     if (beacon) {

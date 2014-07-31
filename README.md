@@ -39,10 +39,10 @@ and end like this
 `-----END RSA PRIVATE KEY-----`
 
 3. Paste the text you got from the certificate.pem into the appropriate certificate box (either sandbox/development or production). You can verify that you have created the correct keys and certs by the presence of the phrase `Apple Development IOS Push Services` for sandbox and `Apple Production IOS Push Services` for production.
-4. Now it's as easy as writing a context rule to send a push notification any time there is a "beacon_in" event. Go to "Contexts" in the ContextHub developer portal, click on the "beacon_in" event you created in "WayFinder with Vault", and put in the following line of code (replacing the "true" from earlier): `push.sendToTags("testing", "You have entered the range of a beacon")`. Then click save.
+4. Now it's as easy as writing a context rule to send a push notification any time there is a "beacon_in" event. Go to "Contexts" in the ContextHub developer portal, click on the "beacon_in" event you created in "WayFinder with Vault", and put in the following line of code (replacing the "true" from earlier): `push.sendToTags("device-wayfinder", "You have entered the range of a beacon")`. Then click save.
 5. Lastly, we'll write the rule to send a push when a "beacon_out" event is sent, but only from the 3rd beacon. In the "beacon_out" context, paste in the following code: 
 `if (event.data.beacon.minor == "3") {
-    push.sendToTags("testing", "You have left the range of beacon 3")
+    push.sendToTags("device-wayfinder", "You have left the range of beacon 3")
 }`
 
 This code looks inside the event object generated from the beacon_out event to see what minor value was present. Look at the documentation for each of the objects to read more about what you can do within a context.
@@ -67,7 +67,7 @@ Launch and run the app from your device. Here's how it works:
 
 ### Code
 
-Building on top of "WayFinder with Vault", the critical part of this WayFinder v3.0 sample app is being able to send push notifications from the server and receive them on the device:
+Building on top of "WayFinder with Vault", the critical part of this "WayFinder with Vault and Push" sample app is being able to send push notifications from the server and receive them on the device:
 
 1. In `application:didFinishLaunchingWithOptions:`, make sure to put the following 3 lines of code *before* you call `[ContextHub registerWithAppId:]`:
 `#ifdef DEBUG

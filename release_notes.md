@@ -6,7 +6,7 @@ WayFinder with Vault and Push
 - Update README
 - Switch from branch off of WayFinder 1.0 to separate GitHub repository
 - Rename sample app from "WayFinder 2.0" to "WayFinder with Vault and Push"
-- Rename beacn and vault tags to "beacon-wayfinder" and "vault-wayfinder" to avoid confusion
+- Rename beacon and vault tags to "beacon-wayfinder" and "vault-wayfinder" to avoid confusion
 - Added MIT License
 - NOTE: The hard coded keypaths in CLBeaconRegion+ContextHub will be put into the ContextHub framework in the next release
 
