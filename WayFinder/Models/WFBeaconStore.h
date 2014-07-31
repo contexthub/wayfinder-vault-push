@@ -15,7 +15,6 @@
 + (instancetype)sharedStore;
 
 - (void)getBeaconsFromServer;
-- (void)getBeaconsFromFile;
 
 - (WFBeaconMetadata *)metadataForBeaconWithName:(NSString *)beaconName;
 - (WFBeaconMetadata *)firstBeacon;

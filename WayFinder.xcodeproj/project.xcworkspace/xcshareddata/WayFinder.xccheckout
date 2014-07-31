@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>23ADF6AF-68EC-42DB-89CB-B9990FD07A3E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WayFinder</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E5E43188-589F-4E23-BD5C-F1B77016DD26</key>
+		<string>ssh://github.com/contexthub/wayfinder-vault-push.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>WayFinder.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E5E43188-589F-4E23-BD5C-F1B77016DD26</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/contexthub/wayfinder-vault-push.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E5E43188-589F-4E23-BD5C-F1B77016DD26</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E5E43188-589F-4E23-BD5C-F1B77016DD26</string>
+			<key>IDESourceControlWCCName</key>
+			<string>wayfinder-vault-push</string>
+		</dict>
+	</array>
+</dict>
+</plist>
